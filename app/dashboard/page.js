@@ -237,390 +237,412 @@ export default function DashboardPage() {
 
   return (
     <AnimatePresence>
-    <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
-      className="min-h-screen bg-gray-100"
-    >
-      <DashboardSidebar
-        activePage="Dashboard"
-        isOpen={sidebarOpen}
-        onToggle={() => setSidebarOpen((o) => !o)}
-        onClose={() => setSidebarOpen(false)}
-      />
-      <DashboardNavbar
-        userName={userName}
-        sidebarOpen={sidebarOpen}
-        user={user}
-        onToggleSidebar={() => setSidebarOpen((o) => !o)}
-      />
-      <section
-        className={`pt-16 transition-all duration-300 ml-0 ${sidebarOpen ? "lg:ml-64" : "lg:ml-16"}`}
+      <motion.main
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className="min-h-screen bg-gray-100"
       >
-        <div className="p-8 space-y-8">
-          <h1 className="text-3xl font-bold text-gray-950">
-            Welcome {userName}
-          </h1>
+        <DashboardSidebar
+          activePage="Dashboard"
+          isOpen={sidebarOpen}
+          onToggle={() => setSidebarOpen((o) => !o)}
+          onClose={() => setSidebarOpen(false)}
+        />
+        <DashboardNavbar
+          userName={userName}
+          sidebarOpen={sidebarOpen}
+          user={user}
+          onToggleSidebar={() => setSidebarOpen((o) => !o)}
+        />
+        <section
+          className={`pt-16 transition-all duration-300 ml-0 ${sidebarOpen ? "lg:ml-64" : "lg:ml-16"}`}
+        >
+          <div className="p-8 space-y-8">
+            <h1 className="text-3xl font-bold text-gray-950">
+              Welcome {userName}
+            </h1>
 
-          {/* Stat Cards */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {stats.map((stat, index) => (
+            {/* Stat Cards */}
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, y: -30, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 80,
+                    damping: 20,
+                    delay: index * 0.15,
+                  }}
+                  className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
+                >
+                  <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                    {stat.label}
+                  </p>
+                  <div className="mt-4 flex items-end justify-between gap-4">
+                    <p className="text-2xl font-bold text-gray-950">
+                      {stat.value}
+                    </p>
+                    <p className={`text-sm font-semibold ${stat.changeColor}`}>
+                      {stat.change}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Charts */}
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+              {/* Revenue Over Time */}
               <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: -30, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{
                   type: "spring",
                   stiffness: 80,
                   damping: 20,
-                  delay: index * 0.15,
+                  delay: 0.3,
                 }}
                 className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
               >
-                <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
-                  {stat.label}
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                    Revenue Over Time
+                  </p>
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setRevenueDropdownOpen((o) => !o)}
+                      className="flex items-center gap-1 text-xs font-semibold text-[#4F46E5]"
+                    >
+                      {selectedRevenueMonth === currentMonth
+                        ? "THIS MONTH"
+                        : selectedRevenueMonth}
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m6 9 6 6 6-6"
+                        />
+                      </svg>
+                    </button>
+                    {revenueDropdownOpen && (
+                      <div className="absolute right-0 top-6 z-10 rounded-md border border-gray-200 bg-white shadow-lg">
+                        {months.map((month) => (
+                          <button
+                            key={month}
+                            type="button"
+                            onClick={() => {
+                              setSelectedRevenueMonth(month);
+                              setRevenueDropdownOpen(false);
+                            }}
+                            className={`block w-full px-4 py-2 text-left text-xs font-medium hover:bg-gray-50 ${selectedRevenueMonth === month ? "text-[#4F46E5]" : "text-gray-700"}`}
+                          >
+                            {month}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height={180}>
+                  <AreaChart data={revenueData}>
+                    <defs>
+                      <linearGradient
+                        id="revenueGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="5%"
+                          stopColor="#4F46E5"
+                          stopOpacity={0.2}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#4F46E5"
+                          stopOpacity={0}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 10 }}
+                      tickFormatter={(v) => `\u20A6${v / 1000}k`}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip
+                      {...darkTooltip}
+                      formatter={(value) => [
+                        `\u20A6${value.toLocaleString()}`,
+                        "Revenue",
+                      ]}
+                      labelFormatter={(label) => `${label} 2024`}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#4F46E5"
+                      fill="url(#revenueGradient)"
+                      strokeWidth={2}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </motion.div>
+
+              {/* Top Performing Plans */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 80,
+                  damping: 20,
+                  delay: 0.3,
+                }}
+                className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
+              >
+                <div className="mb-4 flex items-center justify-between">
+                  <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                    Top Performing Plans
+                  </p>
+
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setPlansDropdownOpen((o) => !o)}
+                      className="flex items-center gap-1 text-xs font-semibold text-[#4F46E5]"
+                    >
+                      {selectedPlansMonth === currentMonth
+                        ? "THIS MONTH"
+                        : selectedPlansMonth}
+
+                      <svg
+                        className="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m6 9 6 6 6-6"
+                        />
+                      </svg>
+                    </button>
+
+                    {plansDropdownOpen && (
+                      <div className="absolute right-0 top-6 z-10 rounded-md border border-gray-200 bg-white shadow-lg">
+                        {months.map((month) => (
+                          <button
+                            key={month}
+                            type="button"
+                            onClick={() => {
+                              setSelectedPlansMonth(month);
+                              setPlansDropdownOpen(false);
+                            }}
+                            className={`block w-full px-4 py-2 text-left text-xs font-medium hover:bg-gray-50 ${
+                              selectedPlansMonth === month
+                                ? "text-[#4F46E5]"
+                                : "text-gray-700"
+                            }`}
+                          >
+                            {month}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <ResponsiveContainer width="100%" height={180}>
+                  <BarChart data={plansData}>
+                    <XAxis
+                      dataKey="plan"
+                      tick={{ fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 10 }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <Tooltip {...darkTooltip} />
+                    <Bar dataKey="users" fill="#a5b4fc" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </motion.div>
+
+              {/* User Distribution */}
+              <motion.div
+                initial={{ opacity: 0, x: -40 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 80,
+                  damping: 20,
+                  delay: 0.3,
+                }}
+                className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
+              >
+                <p className="mb-4 text-xs font-semibold tracking-widest text-gray-400 uppercase">
+                  User Distribution by Country
                 </p>
-                <div className="mt-4 flex items-end justify-between gap-4">
-                  <p className="text-2xl font-bold text-gray-950">
-                    {stat.value}
-                  </p>
-                  <p className={`text-sm font-semibold ${stat.changeColor}`}>
-                    {stat.change}
-                  </p>
+                <ResponsiveContainer width="100%" height={180}>
+                  <PieChart>
+                    <Pie
+                      data={countryData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={50}
+                      outerRadius={75}
+                      dataKey="value"
+                    >
+                      {countryData.map((entry) => (
+                        <Cell key={entry.name} fill={entry.color} />
+                      ))}
+                      <Label
+                        value={`${totalUsers}`}
+                        position="centerBottom"
+                        className="text-lg font-bold"
+                        fill="#111827"
+                        fontSize={18}
+                        fontWeight="bold"
+                        dy={-4}
+                      />
+                      <Label
+                        value="Total users"
+                        position="centerTop"
+                        fill="#6b7280"
+                        fontSize={11}
+                        dy={14}
+                      />
+                    </Pie>
+                    <Tooltip {...darkTooltip} />
+                  </PieChart>
+                </ResponsiveContainer>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  {countryData.map((entry) => (
+                    <div key={entry.name} className="flex items-center gap-2">
+                      <span
+                        className="h-2.5 w-2.5 flex-shrink-0 rounded-full"
+                        style={{ backgroundColor: entry.color }}
+                      />
+                      <span className="text-xs text-gray-600">
+                        {entry.name} ({entry.value})
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
-            ))}
-          </div>
-
-          {/* Charts */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            {/* Revenue Over Time */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 20,
-                delay: 0.3,
-              }}
-              className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
-            >
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
-                  Revenue Over Time
-                </p>
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setRevenueDropdownOpen((o) => !o)}
-                    className="flex items-center gap-1 text-xs font-semibold text-[#4F46E5]"
-                  >
-                    {selectedRevenueMonth === currentMonth
-                      ? "THIS MONTH"
-                      : selectedRevenueMonth}
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m6 9 6 6 6-6"
-                      />
-                    </svg>
-                  </button>
-                  {revenueDropdownOpen && (
-                    <div className="absolute right-0 top-6 z-10 rounded-md border border-gray-200 bg-white shadow-lg">
-                      {months.map((month) => (
-                        <button
-                          key={month}
-                          type="button"
-                          onClick={() => {
-                            setSelectedRevenueMonth(month);
-                            setRevenueDropdownOpen(false);
-                          }}
-                          className={`block w-full px-4 py-2 text-left text-xs font-medium hover:bg-gray-50 ${selectedRevenueMonth === month ? "text-[#4F46E5]" : "text-gray-700"}`}
-                        >
-                          {month}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <ResponsiveContainer width="100%" height={180}>
-                <AreaChart data={revenueData}>
-                  <defs>
-                    <linearGradient
-                      id="revenueGradient"
-                      x1="0"
-                      y1="0"
-                      x2="0"
-                      y2="1"
-                    >
-                      <stop offset="5%" stopColor="#4F46E5" stopOpacity={0.2} />
-                      <stop offset="95%" stopColor="#4F46E5" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="date" tick={{ fontSize: 10 }} />
-                  <YAxis
-                    tick={{ fontSize: 10 }}
-                    tickFormatter={(v) => `\u20A6${v / 1000}k`}
-                  />
-                  <Tooltip
-                    {...darkTooltip}
-                    formatter={(value) => [
-                      `\u20A6${value.toLocaleString()}`,
-                      "Revenue",
-                    ]}
-                    labelFormatter={(label) => `${label} 2024`}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="revenue"
-                    stroke="#4F46E5"
-                    fill="url(#revenueGradient)"
-                    strokeWidth={2}
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </motion.div>
-
-            {/* Top Performing Plans */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 20,
-                delay: 0.3,
-              }}
-              className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
-            >
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-xs font-semibold tracking-widest text-gray-400 uppercase">
-                  Top Performing Plans
-                </p>
-
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setPlansDropdownOpen((o) => !o)}
-                    className="flex items-center gap-1 text-xs font-semibold text-[#4F46E5]"
-                  >
-                    {selectedPlansMonth === currentMonth
-                      ? "THIS MONTH"
-                      : selectedPlansMonth}
-
-                    <svg
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m6 9 6 6 6-6"
-                      />
-                    </svg>
-                  </button>
-
-                  {plansDropdownOpen && (
-                    <div className="absolute right-0 top-6 z-10 rounded-md border border-gray-200 bg-white shadow-lg">
-                      {months.map((month) => (
-                        <button
-                          key={month}
-                          type="button"
-                          onClick={() => {
-                            setSelectedPlansMonth(month);
-                            setPlansDropdownOpen(false);
-                          }}
-                          className={`block w-full px-4 py-2 text-left text-xs font-medium hover:bg-gray-50 ${
-                            selectedPlansMonth === month
-                              ? "text-[#4F46E5]"
-                              : "text-gray-700"
-                          }`}
-                        >
-                          {month}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-              <ResponsiveContainer width="100%" height={180}>
-                <BarChart data={plansData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="plan" tick={{ fontSize: 10 }} />
-                  <YAxis tick={{ fontSize: 10 }} />
-                  <Tooltip {...darkTooltip} />
-                  <Bar dataKey="users" fill="#a5b4fc" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            </motion.div>
-
-            {/* User Distribution */}
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{
-                type: "spring",
-                stiffness: 80,
-                damping: 20,
-                delay: 0.3,
-              }}
-              className="rounded-lg bg-white p-6 shadow-sm ring-1 ring-gray-200"
-            >
-              <p className="mb-4 text-xs font-semibold tracking-widest text-gray-400 uppercase">
-                User Distribution by Country
-              </p>
-              <ResponsiveContainer width="100%" height={180}>
-                <PieChart>
-                  <Pie
-                    data={countryData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={50}
-                    outerRadius={75}
-                    dataKey="value"
-                  >
-                    {countryData.map((entry) => (
-                      <Cell key={entry.name} fill={entry.color} />
-                    ))}
-                    <Label
-                      value={`${totalUsers}`}
-                      position="centerBottom"
-                      className="text-lg font-bold"
-                      fill="#111827"
-                      fontSize={18}
-                      fontWeight="bold"
-                      dy={-4}
-                    />
-                    <Label
-                      value="Total users"
-                      position="centerTop"
-                      fill="#6b7280"
-                      fontSize={11}
-                      dy={14}
-                    />
-                  </Pie>
-                  <Tooltip {...darkTooltip} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="mt-3 grid grid-cols-2 gap-2">
-                {countryData.map((entry) => (
-                  <div key={entry.name} className="flex items-center gap-2">
-                    <span
-                      className="h-2.5 w-2.5 flex-shrink-0 rounded-full"
-                      style={{ backgroundColor: entry.color }}
-                    />
-                    <span className="text-xs text-gray-600">
-                      {entry.name} ({entry.value})
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Latest Signups */}
-          <section>
-            <h2 className="mb-4 text-xl font-bold text-gray-950">
-              Latest Signups
-            </h2>
-            <div className="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200">
-              <div className="overflow-x-auto">
-              <table className="w-full text-left">
-                <thead className="border-b border-gray-200">
-                  <tr>
-                    {["NAME", "EMAIL", "PLAN", "JOINED", "STATUS"].map(
-                      (col) => (
-                        <th
-                          key={col}
-                          className="px-6 py-4 text-xs font-bold tracking-widest text-gray-400 uppercase"
-                        >
-                          {col}
-                        </th>
-                      ),
-                    )}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  {currentRows.map((signup, index) => (
-                    <tr
-                      key={`${signup.name}-${pageStart + index}`}
-                      className="hover:bg-gray-50"
-                    >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <img
-                            src={signup.avatar}
-                            alt={signup.name}
-                            width={36}
-                            height={36}
-                            className="rounded-full bg-gray-100"
-                          />
-                          <span className="text-sm font-semibold text-gray-900">
-                            {signup.name}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
-                        {signup.email}
-                      </td>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-700">
-                        {signup.plan}
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-600">
-                        {signup.joined}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusClass(signup.status)}`}
-                        >
-                          {signup.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-              <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                  disabled={currentPage === 1}
-                  className="rounded-md border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  &lt;
-                </button>
-                <span className="text-sm font-medium text-gray-600">
-                  page {currentPage} of {totalPages}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                  disabled={currentPage === totalPages}
-                  className="rounded-md border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  &gt;
-                </button>
-              </div>
             </div>
-          </section>
-        </div>
-      </section>
-    </motion.main>
+
+            {/* Latest Signups */}
+            <section>
+              <h2 className="mb-4 text-xl font-bold text-gray-950">
+                Latest Signups
+              </h2>
+              <div className="overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-gray-200">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left">
+                    <thead className="border-b border-gray-200">
+                      <tr>
+                        {["NAME", "EMAIL", "PLAN", "JOINED", "STATUS"].map(
+                          (col) => (
+                            <th
+                              key={col}
+                              className="px-6 py-4 text-xs font-bold tracking-widest text-gray-400 uppercase"
+                            >
+                              {col}
+                            </th>
+                          ),
+                        )}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-100">
+                      {currentRows.map((signup, index) => (
+                        <tr
+                          key={`${signup.name}-${pageStart + index}`}
+                          className="hover:bg-gray-50"
+                        >
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={signup.avatar}
+                                alt={signup.name}
+                                width={36}
+                                height={36}
+                                className="rounded-full bg-gray-100"
+                              />
+                              <span className="text-sm font-semibold text-gray-900">
+                                {signup.name}
+                              </span>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {signup.email}
+                          </td>
+                          <td className="px-6 py-4 text-sm font-medium text-gray-700">
+                            {signup.plan}
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            {signup.joined}
+                          </td>
+                          <td className="px-6 py-4">
+                            <span
+                              className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${getStatusClass(signup.status)}`}
+                            >
+                              {signup.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="flex items-center justify-end gap-3 border-t border-gray-100 px-6 py-4">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => p - 1)}
+                    disabled={currentPage === 1}
+                    className="rounded-md border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    &lt;
+                  </button>
+                  <span className="text-sm font-medium text-gray-600">
+                    page {currentPage} of {totalPages}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage((p) => p + 1)}
+                    disabled={currentPage === totalPages}
+                    className="rounded-md border border-gray-200 px-3 py-2 text-sm font-semibold text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  >
+                    &gt;
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+      </motion.main>
     </AnimatePresence>
   );
 }
