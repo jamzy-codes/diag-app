@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useOnboarding } from "@/context/OnboardingContext";
+import Logo from "@/components/brand/Logo";
 
 export default function DashboardNavbar({
   userName = "User",
@@ -68,10 +69,7 @@ export default function DashboardNavbar({
           </svg>
         </button>
 
-        <img src="/Diag Logo.png" alt="DIAG logo" width={28} height={28} />
-        <span className="text-xl font-bold tracking-wide text-gray-950">
-          DIAG
-        </span>
+        <Logo className="text-xl" />
       </div>
 
       <div className="hidden flex-1 justify-start ml-30 lg:flex">

@@ -13,11 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "DIAG",
-  description: "Analytics application",
-  icons: {
-    icon: "/Diag Logo.png",
+  title: {
+    default: "Ledgview | Revenue analytics for indie SaaS",
+    template: "%s | Ledgview",
   },
+  description:
+    "See your MRR, churn, plan mix and top countries in one clear dashboard. Import a CSV or send events and Ledgview does the math.",
+  applicationName: "Ledgview",
 };
 
 export default function RootLayout({ children }) {

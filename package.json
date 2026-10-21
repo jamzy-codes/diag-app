@@ -1,5 +1,6 @@
 {
-  "name": "diag-app",
+  "name": "ledgview",
+  "description": "Revenue analytics for indie SaaS founders. Rebuild in progress.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
