@@ -10,10 +10,10 @@ export default function OnboardingSidebar({ currentStep = 1 }) {
     <aside className="hidden lg:flex min-h-screen w-1/3 flex-col bg-transparent px-10 py-10">
       <div className="mb-12">
         <h1 className="mb-4 text-3xl font-bold leading-tight text-gray-950">
-          Let's get you set up in just 4 steps
+          Let&apos;s get you set up in just 4 steps
         </h1>
         <p className="text-base leading-7 text-gray-500">
-          We'll keep it short and simple, just what we need to personalize your
+          We&apos;ll keep it short and simple, just what we need to personalize your
           experience.
         </p>
       </div>

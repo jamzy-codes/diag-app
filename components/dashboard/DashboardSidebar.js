@@ -211,7 +211,7 @@ export default function DashboardSidebar({
               </div>
 
               <p className="text-sm font-bold text-gray-950">
-                You're on a 7-day free trial
+                You&apos;re on a 7-day free trial
               </p>
 
               <p className="mt-2 text-xs leading-5 text-gray-600">

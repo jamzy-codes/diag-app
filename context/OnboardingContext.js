@@ -27,6 +27,7 @@ export function OnboardingProvider({ children }) {
       const savedData = localStorage.getItem(STORAGE_KEY);
 
       if (savedData) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- file is removed in the backend rebuild
         setOnboardingData((currentData) => ({
           ...currentData,
           ...JSON.parse(savedData),

@@ -179,7 +179,7 @@ export default function OnboardingStepTwoPage() {
               )}
 
               <p className="text-center text-sm text-gray-500">
-                Didn't get Code?{" "}
+                Didn&apos;t get Code?{" "}
                 {timer > 0 ? (
                   <span className="font-semibold text-[#4F46E5]">
                     Resend code in {timer}s

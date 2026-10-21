@@ -91,8 +91,8 @@ export default function OnboardingStepFourPage() {
                 Create your workspace
               </h1>
               <p className="mt-3 text-sm leading-6 text-gray-500">
-                Name your workspace and invite teammates (if you'd like). You
-                can always add more later, we'll keep things flexible.
+                Name your workspace and invite teammates (if you&apos;d like). You
+                can always add more later, we&apos;ll keep things flexible.
               </p>
             </div>
 
@@ -102,7 +102,7 @@ export default function OnboardingStepFourPage() {
                   htmlFor="workspaceName"
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
-                  What's the name of your workspace?
+                  What&apos;s the name of your workspace?
                 </label>
                 <input
                   id="workspaceName"

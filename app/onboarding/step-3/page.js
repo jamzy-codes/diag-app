@@ -97,11 +97,11 @@ export default function OnboardingStepThreePage() {
 
             <div className="mb-8 pr-12">
               <h1 className="text-2xl font-bold text-gray-950">
-                Who's joining us?
+                Who&apos;s joining us?
               </h1>
               <p className="mt-3 text-sm leading-6 text-gray-500">
-                We'd love to know your name and role so we can tailor the
-                experience to how you work best, whether you're solo or with a
+                We&apos;d love to know your name and role so we can tailor the
+                experience to how you work best, whether you&apos;re solo or with a
                 team.
               </p>
             </div>
@@ -132,7 +132,7 @@ export default function OnboardingStepThreePage() {
                   htmlFor="role"
                   className="mb-2 block text-sm font-medium text-gray-700"
                 >
-                  What's your role?
+                  What&apos;s your role?
                 </label>
                 <input
                   id="role"

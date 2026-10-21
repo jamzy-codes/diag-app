@@ -158,7 +158,7 @@ export default function LoginPage() {
               )}
 
               <p className="text-center text-sm text-gray-500">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
                   href="/onboarding/step-1"
                   className="font-semibold text-[#4F46E5]"

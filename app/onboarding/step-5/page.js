@@ -157,7 +157,7 @@ export default function OnboardingStepFivePage() {
                   <li>Separate multiple emails with commas</li>
                   <li>Press Enter or comma to add each teammate</li>
                   <li>
-                    They won't receive an invite until you've completed your
+                    They won&apos;t receive an invite until you&apos;ve completed your
                     setup
                   </li>
                   <li>You can skip this step and invite teammates later</li>

@@ -105,7 +105,7 @@ export default function OnboardingStepOnePage() {
 
             <div className="mb-8 pr-12">
               <h1 className="text-2xl font-bold text-gray-950">
-                Let's start with the basics
+                Let&apos;s start with the basics
               </h1>
               <p className="mt-2 text-sm leading-6 text-gray-500">
                 Enter your email and set a secure password. This helps us keep
@@ -219,7 +219,7 @@ export default function OnboardingStepOnePage() {
                 </p>
 
                 <p className="text-center text-xs leading-5 text-gray-400">
-                  By creating an account, I agree to MayK AI's{" "}
+                  By creating an account, I agree to MayK AI&apos;s{" "}
                   <Link href="/terms" className="font-medium text-gray-600">
                     Terms of Use
                   </Link>{" "}
